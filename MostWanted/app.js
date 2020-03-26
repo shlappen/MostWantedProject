@@ -14,7 +14,7 @@ function app(people){
     case 'no':
       // TODO: search by traits
       // which trait would you liek t
-    
+      
       break;
       default:
     app(people); // restart app
@@ -77,6 +77,24 @@ function searchByName(people){
   return foundPerson;
 }
 
+function searchByName(people){
+  let firstName = promptFor("What is the person's first name?", chars);
+  let lastName = promptFor("What is the person's last name?", chars);
+
+  var foundPerson = people.filter(function(person){
+    if(person.firstName === firstName && person.lastName === lastName){
+      return true;
+    }
+    else{
+      return false;
+    }
+  })
+
+  // TODO: find the person using the name they entered
+  
+  return foundPerson;
+}
+
 // alerts a list of people // for displaying multiple people
 function displayPeople(people){
   alert(people.map(function(person){
@@ -96,9 +114,7 @@ function displayPerson(person){
   personInfo += "Weight: " + person[0].weight + "\n";
   personInfo += "Eye Color: " + person[0].eyeColor + "\n";
   personInfo += "Occupation: " + person[0].occupation + "\n";
-  personInfo += "Parents: " + person[0].parents + "\n";
   personInfo += "Current Spouse: " + person[0].currentSpouse + "\n";
-  // TODO: finish getting the rest of the information to display
   alert(personInfo);
 }
 

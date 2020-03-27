@@ -181,10 +181,13 @@ function searchByName(people){
 }
 
 function searchForFamily(person, people){
-  var spouseList = findCurrentSpouse(person, people);
+  var spouseDisplay = findCurrentSpouse(person, people);
   var parentList = findParents(person, people);
   var childrenList = findChildren(person, people);
-  return childrenList;
+  //var displayFamily = prompt(person[0].firstName + " " + person[0].lastName + "'s Known Family:");
+  let personInfo = person[0].firstName + person[0].lastName + "'s Known Family: \n";
+  //personInfo += "First Name: " + person[0].firstName + "\n";
+  prompt(personInfo);
 }
 
 function findChildren(person, people){
@@ -260,19 +263,22 @@ function findParents(person, people){
 }
 
 function findCurrentSpouse(person, people){
+  let spouseInfo = "Current Spouse: ";
   var spouseToCheck = person[0].currentSpouse;
   var foundFamily = people.map(function(el){
     if(spouseToCheck === el.id){
-      let relationship = "spouse";
+      //spouseInfo += el.firstName + " " + el.lastName + "\n";
       console.log(el.firstName + " " + el.lastName + ": spouse");
       return el;
     }
     else{
+      //spouseInfo += "none known \n";
       return false;
     }
   })
   var nonFalseFoundSpouse = foundFamily.filter(Boolean);
-  return nonFalseFoundSpouse;
+  // need to loop through these boolean checked values and create  prompts
+  return spouseInfo;
 }
 
 // alerts a list of people // for displaying multiple people

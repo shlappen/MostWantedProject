@@ -139,7 +139,7 @@ function mainMenu(person, people){
     // TODO: get person's info
     break;
     case "family":
-    // TODO: get person's family
+      searchForFamily(person, people);
     break;
     case "descendants":
     // TODO: get person's descendants
@@ -172,6 +172,52 @@ function searchByName(people){
   return foundPerson;
 }
 
+function displayFamily(person){
+  // Find if there are any family members
+  var theFamily = searchForFamily(person);
+  for (let i = 0; i < theFamily.length; i++) {
+    
+  }
+  let personInfo = "ID: " + person[i].id + "\n";
+  personInfo += "First Name: " + person[i].firstName + "\n";
+  personInfo += "Last Name: " + person[i].lastName + "\n";
+  // personInfo += "Gender: " + person[0].gender + "\n";
+  // personInfo += "DOB: " + person[0].dob + "\n";
+  // personInfo += "Height: " + person[0].height + "\n";
+  // personInfo += "Weight: " + person[0].weight + "\n";
+  // personInfo += "Eye Color: " + person[0].eyeColor + "\n";
+  // personInfo += "Occupation: " + person[0].occupation + "\n";
+  // personInfo += "Parents: " + person[0].parents + "\n";
+  // personInfo += "Current Spouse: " + person[0].currentSpouse + "\n";
+  // TODO: finish getting the rest of the information to display
+  alert(personInfo);
+}
+
+function searchForFamily(person, people){
+  var spouseList = findCurrentSpouse(person, people);
+  var parentList = findParents(person, people)
+  return spouseList;
+}
+
+function findParents(person, people){
+  var idToCheck = person[0].id;
+}
+
+function findCurrentSpouse(person, people){
+  var spouseToCheck = person[0].currentSpouse;
+  var foundFamily = people.map(function(el){
+    if(spouseToCheck === el.id){
+      console.log(el.firstName);
+      return el;
+    }
+    else{
+      return false;
+    }
+  })
+  var nonFalseFoundSpouse = foundFamily.filter(Boolean);
+  return nonFalseFoundSpouse;
+}
+
 // alerts a list of people // for displaying multiple people
 function displayPeople(people){
   alert(people.map(function(person){
@@ -191,7 +237,9 @@ function displayPerson(person){
   personInfo += "Weight: " + person[0].weight + "\n";
   personInfo += "Eye Color: " + person[0].eyeColor + "\n";
   personInfo += "Occupation: " + person[0].occupation + "\n";
+  personInfo += "Parents: " + person[0].parents + "\n";
   personInfo += "Current Spouse: " + person[0].currentSpouse + "\n";
+  // TODO: finish getting the rest of the information to display
   alert(personInfo);
 }
 

@@ -31,7 +31,7 @@ function displaySearchOptionList(){
   "'4': Eye Color" + "\n" +
   "'5': Occupation" + "\n" +
   "'6': Start new search" + "\n" +
-  "Type the number of the option you want or 'restart' or 'quit'", chars);
+  "Type the number of the option you want or 'restart' or 'quit'", ints);
   return input;
 }
 
@@ -44,89 +44,69 @@ function runSearch(people){
       isSearching = false;
     } else {
       foundPeople = enterSearchCriteria(foundPeople, input);
-      displayPeople(foundPeople);
+      if(!foundPeople)
+      {
+        alert("No matches found. Please try again.");
+        runSearch(people);
+      }
+      else{
+        displayPeople(foundPeople);
+      }
     }
   }
   runSearch(people);
 }
 
-// {"Gender": ""}, {"Height" : 0}, {"Weight" : 0}, {"Eye Color" : ""}, {"Occupation" : ""}
-
 function enterSearchCriteria(foundPeople, input){
   switch(input){
     case "1":
+      var trait = "gender";
       var selection = promptFor("Are they male or female?", chars);
-          foundPeople = foundPeople.filter(function(person){
-          if(person.gender == selection){
-            return true;
-          }
-          else{
-            return false;
-          }
-        })
+      foundPeople = getPeople(trait, selection, foundPeople);
       break;
     case "2":
-      var selection = promptFor("What is their height in inches?", chars);
-      foundPeople = foundPeople.filter(function(person){
-      if(person.height == parseInt(selection)){
-        return true;
-      }
-      else{
-        return false;
-      }
-    })
+      var trait = "height";
+      var selection = parseInt(promptFor("What is their " + trait + " in inches?", chars));
+      foundPeople = getPeople(trait, selection, foundPeople);
       break;
     case "3":
-      var selection = promptFor("What is their weight in pounds?", chars);
-      foundPeople = foundPeople.filter(function(person){
-      if(person.weight == parseInt(selection)){
-        return true;
-      }
-      else{
-        return false;
-      }
-    })
+      var trait = "weight";
+      var selection = parseInt(promptFor("What is their " + trait + " in pounds?", chars));
+      foundPeople = getPeople(trait, selection, foundPeople);
       break;
     case "4":
+      var trait = "eyeColor";
       var selection = promptFor("What is their eye color?", chars);
-      foundPeople = foundPeople.filter(function(person){
-        if(person.eyeColor == selection){
-          return true;
-        }
-        else{
-          return false;
-        }
-      })
+      foundPeople = getPeople(trait, selection, foundPeople);
       break;
     case "5":
-      var selection = promptFor("What is their occupation?", chars);
-      foundPeople = foundPeople.filter(function(person){
-        if(person.occupation == selection){
-          return true;
-        }
-        else{
-          return false;
-        }
-      })
+      var trait = "occupation";
+      var selection = promptFor("What is their " + trait + "?", chars);
+      foundPeople = getPeople(trait, selection, foundPeople);
       break;
-    default:
-      runSearch(foundPeople); //search by a different trait
+    case "restart":
+      app(people); // restart
       break;
+    case "quit":
+      return; // stop execution
+      default:
+      return runSearch(foundPeople); //ask again and search by a different trait
   }
   return foundPeople;
 }
 
-// function getPeople(key, value, people){
-//   foundPeople = people.filter(function(person){
-//     if(person[key] == value){
-//       return true;
-//     }
-//     else{
-//       return false;
-//     }
-//   })
-//   return foundPeople;
-// }
+function getPeople(key, value, foundPeople){
+  foundPeople = foundPeople.filter(function(person){
+    if(person[key] == value){
+      return true;
+    }
+    else{
+      return false;
+    }
+  })
+  return foundPeople;
+}
+
 
 
 // Menu function to call once you find who you are looking for
@@ -206,44 +186,7 @@ function displayFamily(person, relationship){
 function searchForFamily(person, people){
   var spouseList = findCurrentSpouse(person, people);
   var parentList = findParents(person, people);
-  var childrenList = findChildren(person, people);
   return spouseList;
-}
-
-function findChildren(person, people){
-  let idToCheck = person[0].id;
-  let personName = person[0].firstName + " " + person[0].lastName;
-  // parentsToCheck is the name of the Array each person has containing known parents
-  var parentsToCheck = person[0].parents;
-  // Now lets loop through the parentsToCheck Array and get their ids
-  if (parentsToCheck.length != 0){
-    parentsToCheck.forEach(function (arrayItem) {
-      var parentId = arrayItem;
-      //console.log(parentId);
-      //Now we have the parent's id, we can cross check them against "the people" and get their info to output their names and relationships
-      people.forEach(function (peoplesItem) {
-        if(peoplesItem.id === parentId){
-          //now we get gender to determine relationship
-          if(peoplesItem.gender === "male"){
-            var parentalRelationship = "father"
-          }
-          else{
-            var parentalRelationship = "mother"
-          }
-          //Now that we have the person and the relationship we will output the info
-          console.log(peoplesItem.firstName + " " + peoplesItem.lastName + ": " + parentalRelationship);
-        }
-        //var x = peoplesItem.id + 2;
-        //console.log(x);
-    });
-      
-      //console.log(x);
-  });
-  }
-  else{
-    //alert(personName + " does not have any known parents.");
-    console.log(personName + " does not have any known children.");
-  }
 }
 
 function findParents(person, people){
@@ -268,6 +211,7 @@ function findParents(person, people){
           }
           //Now that we have the person and the relationship we will output the info
           console.log(peoplesItem.firstName + " " + peoplesItem.lastName + ": " + parentalRelationship);
+          
         }
         //var x = peoplesItem.id + 2;
         //console.log(x);
@@ -324,6 +268,7 @@ function displayPerson(person){
   alert(personInfo);
 }
 
+
 // function that prompts and validates user input
 function promptFor(question, valid){
   do{
@@ -341,4 +286,10 @@ function yesNo(input){
 // helper function to pass in as default promptFor validation
 function chars(input){
   return true; // default validation only
+}
+
+function ints(input){
+  if(0 < parseInt(input) < 6 || input.toLowerCase == "quit" || input.toLowerCase == "restart"){
+    return true;
+  }
 }

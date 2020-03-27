@@ -13,7 +13,6 @@ function app(people){
       break;
     case 'no':
       runSearch(people);
-      app(people)
       break;
       default:
     app(people); // restart app
@@ -31,13 +30,12 @@ function displaySearchOptionList(){
   "'3': Weight" + "\n" +
   "'4': Eye Color" + "\n" +
   "'5': Occupation" + "\n" +
-  "'6': Search" + "\n" +
+  "'6': Start new search" + "\n" +
   "Type the number of the option you want or 'restart' or 'quit'", chars);
   return input;
 }
 
-function getSearchCriteria(people){
-  // let searchParameters = [];
+function runSearch(people){
   var foundPeople = people;
   var isSearching = true;
   while (isSearching){
@@ -46,9 +44,10 @@ function getSearchCriteria(people){
       isSearching = false;
     } else {
       foundPeople = enterSearchCriteria(foundPeople, input);
+      displayPeople(foundPeople);
     }
   }
-  return foundPeople;
+  runSearch(people);
 }
 
 // {"Gender": ""}, {"Height" : 0}, {"Weight" : 0}, {"Eye Color" : ""}, {"Occupation" : ""}
@@ -78,114 +77,57 @@ function enterSearchCriteria(foundPeople, input){
     })
       break;
     case "3":
-      searchParameters.push({"weight" : promptFor("What is their weight in pounds?", chars)});
+      var selection = promptFor("What is their weight in pounds?", chars);
+      foundPeople = foundPeople.filter(function(person){
+      if(person.weight == parseInt(selection)){
+        return true;
+      }
+      else{
+        return false;
+      }
+    })
       break;
     case "4":
-      searchParameters.push({"eyeColor" : promptFor("What is their eye color?", chars)});
+      var selection = promptFor("What is their eye color?", chars);
+      foundPeople = foundPeople.filter(function(person){
+        if(person.eyeColor == selection){
+          return true;
+        }
+        else{
+          return false;
+        }
+      })
       break;
     case "5":
-      searchParameters.push({"occupation" : promptFor("What is their occupation?", chars)});
+      var selection = promptFor("What is their occupation?", chars);
+      foundPeople = foundPeople.filter(function(person){
+        if(person.occupation == selection){
+          return true;
+        }
+        else{
+          return false;
+        }
+      })
       break;
     default:
-      getSearchCriteria();
+      runSearch(foundPeople); //search by a different trait
       break;
   }
   return foundPeople;
 }
 
-
-function runSearch(people){
-  let foundPeople = getSearchCriteria(people);
-  // var foundPeople = searchByMultipleTraits(people, searchCriteria);
-}
-
-// function searchByMultipleTraits(people, searchCriteria){
-//   var foundPeople;
-//   searchCriteria.forEach(Object.getOwnPropertyNames()){
-//     switch(key){
-//       case "gender":
-//         foundPeople = people.filter(function(person){
-//           if(person.gender == searchCriteria.gender){
-//             return true;
-//           }
-//           else{
-//             return false;
-//           }
-//         })
-//       break;
-//       case "height":
-//         foundPeople = people.filter(function(person){
-//           if(person.height == searchCriteria.height){
-//             return true;
-//           }
-//           else{
-//             return false;
-//           }
-//         })
-//       break;
-//       default:
-//         break;
-//       }
+// function getPeople(key, value, people){
+//   foundPeople = people.filter(function(person){
+//     if(person[key] == value){
+//       return true;
 //     }
-//   }
-
-
-
-
-
-//  function searchByMultipleTraits(people){
-//   var value;
-//   var traitName;
-//   var trait = displaySearchOptionList();
-//   switch(trait){
-//     case '1':
-//       traitName = "gender"
-//       value = promptFor("Male or female?", chars);
-//       people = getPeople(people, traitName, value);
-      
-//       break;
-
-//     case '2':
-//       traitName = "height";
-      
-//       value = promptFor("Please enter height in inches.", chars);
-//       people = getPeople(people, traitName, value);
-//       trait = displaySearchOptionList()
-//       break;
-    // case '3':
-    //   let trait = "weight";
-    //   let value = promptFor("Please weight in pounds.", chars);
-    //   searchResults = searchBy(people, trait, value);
-    //   break;
-    // case '4':
-    //   let trait = "eyeColor"
-    //   let value = promptFor("What is their eye color?", chars);
-    //   searchResult = searchBy(people, trait, value);
-    //   break;
-    // case '5':
-    //   let trait = "occupation"
-    //   let value = promptFor("What is their occupation?", chars);
-    //   searchResult = searchBy(people, trait, value);
-    //   break;
-  //   case '6':
-  //     displayPeople(people);
-  //   default: 
-  //   app(people);
-  //     break;
-  // }
+//     else{
+//       return false;
+//     }
+//   })
+//   return foundPeople;
 // }
 
-// function getPeople(people, traitName, value){
-// var foundPeople = people.filter(function(person){
-//   if(person[traitName] == value){
-//     return true;
-//   }
-//   else{
-//     return false;
-//   }
-// })
-// return foundPeople;
-// }
 
 // Menu function to call once you find who you are looking for
 function mainMenu(person, people){

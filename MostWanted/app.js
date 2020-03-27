@@ -206,7 +206,44 @@ function displayFamily(person, relationship){
 function searchForFamily(person, people){
   var spouseList = findCurrentSpouse(person, people);
   var parentList = findParents(person, people);
+  var childrenList = findChildren(person, people);
   return spouseList;
+}
+
+function findChildren(person, people){
+  let idToCheck = person[0].id;
+  let personName = person[0].firstName + " " + person[0].lastName;
+  // parentsToCheck is the name of the Array each person has containing known parents
+  var parentsToCheck = person[0].parents;
+  // Now lets loop through the parentsToCheck Array and get their ids
+  if (parentsToCheck.length != 0){
+    parentsToCheck.forEach(function (arrayItem) {
+      var parentId = arrayItem;
+      //console.log(parentId);
+      //Now we have the parent's id, we can cross check them against "the people" and get their info to output their names and relationships
+      people.forEach(function (peoplesItem) {
+        if(peoplesItem.id === parentId){
+          //now we get gender to determine relationship
+          if(peoplesItem.gender === "male"){
+            var parentalRelationship = "father"
+          }
+          else{
+            var parentalRelationship = "mother"
+          }
+          //Now that we have the person and the relationship we will output the info
+          console.log(peoplesItem.firstName + " " + peoplesItem.lastName + ": " + parentalRelationship);
+        }
+        //var x = peoplesItem.id + 2;
+        //console.log(x);
+    });
+      
+      //console.log(x);
+  });
+  }
+  else{
+    //alert(personName + " does not have any known parents.");
+    console.log(personName + " does not have any known children.");
+  }
 }
 
 function findParents(person, people){

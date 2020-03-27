@@ -12,8 +12,8 @@ function app(people){
       searchResults = searchByName(people);
       break;
     case 'no':
-      let selectedTrait = displaySearchOptionList();
-      searchByMultipleTraits(people, selectedTrait);
+      GetSearchCriteria();
+      app(people)
       break;
       default:
     app(people); // restart app
@@ -24,9 +24,8 @@ function app(people){
 }
 
 
-//turn this into an array
 function displaySearchOptionList(){
-  let selectedTrait = promptFor("Which trait would you like to search by?" + "\n" +
+  var input = promptFor("Which trait would you like to search by?" + "\n" +
   "'1': Gender" + "\n" +
   "'2': Height" + "\n" +
   "'3': Weight" + "\n" +
@@ -34,25 +33,59 @@ function displaySearchOptionList(){
   "'5': Occupation" + "\n" +
   "'6': Search" + "\n" +
   "Type the number of the option you want or 'restart' or 'quit'", chars);
-  return selectedTrait;
+  //add to array?
+  return input;
 }
 
- function searchByMultipleTraits(people, selectedTrait){
-   var foundPeople;
-  switch(selectedTrait){
-    case '1':
-      let trait = "gender"
-      let value = promptFor("Male or female?", chars);
-      foundPeople += getPeople(people, trait, value);
-      //get people
+function getSearchCriteria(){
+  let searchParameters = [];
+  var isSearching = true;
+  while (isSearching){
+    var input = displaySearchOptionList();
+    if(input == "6"){
+      isSearching = false;
+    } else {
+      searchParameters = enterSearchCriteria(searchParameters, input);
+    }
+  }
+  return searchParameters;
+}
 
-      break;
+// {"Gender": ""}, {"Height" : 0}, {"Weight" : 0}, {"Eye Color" : ""}, {"Occupation" : ""}
 
-    case '2':
-      trait = "height";
-      value = promptFor("Please enter height in inches.", chars);
-      searchBy(people, trait, value);
+function enterSearchCriteria(searchParameters, input){
+  switch(input){
+    case "1":
+      searchParameters.push({"gender" : promptFor("Male or female?", chars)});
       break;
+    case "2":
+      searchParameters.push({"height" : promptFor("Please enter height in inches.", chars)});
+      break;
+      default:
+        getSearchCriteria();
+  }
+  return searchParameters;
+}
+
+//  function searchByMultipleTraits(people){
+//   var value;
+//   var traitName;
+//   var trait = displaySearchOptionList();
+//   switch(trait){
+//     case '1':
+//       traitName = "gender"
+//       value = promptFor("Male or female?", chars);
+//       people = getPeople(people, traitName, value);
+      
+//       break;
+
+//     case '2':
+//       traitName = "height";
+      
+//       value = promptFor("Please enter height in inches.", chars);
+//       people = getPeople(people, traitName, value);
+//       trait = displaySearchOptionList()
+//       break;
     // case '3':
     //   let trait = "weight";
     //   let value = promptFor("Please weight in pounds.", chars);
@@ -68,25 +101,25 @@ function displaySearchOptionList(){
     //   let value = promptFor("What is their occupation?", chars);
     //   searchResult = searchBy(people, trait, value);
     //   break;
-    // case '6':
-    //   displayPeople(people);
-    default: 
-    app(people);
-      break;
-  }
-}
+  //   case '6':
+  //     displayPeople(people);
+  //   default: 
+  //   app(people);
+  //     break;
+  // }
+// }
 
-function getPeople(people, trait, value){
-foundPeople = people.filter(function(person){
-  if(person[trait] == value){
-    return true;
-  }
-  else{
-    return false;
-  }
-})
-return foundPeople;
-}
+// function getPeople(people, traitName, value){
+// var foundPeople = people.filter(function(person){
+//   if(person[traitName] == value){
+//     return true;
+//   }
+//   else{
+//     return false;
+//   }
+// })
+// return foundPeople;
+// }
 
 // Menu function to call once you find who you are looking for
 function mainMenu(person, people){

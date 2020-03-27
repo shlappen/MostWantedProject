@@ -180,70 +180,42 @@ function searchByName(people){
   return foundPerson;
 }
 
-function displayFamily(person, relationship){
-  // Find if there are any family members
-  var theFamily = searchForFamily(person);
-  for (let i = 0; i < theFamily.length; i++) {
-    
-  }
-  
-  let personInfo = "ID: " + person[i].id + "\n";
-  personInfo += "First Name: " + person[i].firstName + "\n";
-  personInfo += "Last Name: " + person[i].lastName + "\n";
-  personInfo += "Relationship: " + relationship + "\n";
-  // personInfo += "DOB: " + person[0].dob + "\n";
-  // personInfo += "Height: " + person[0].height + "\n";
-  // personInfo += "Weight: " + person[0].weight + "\n";
-  // personInfo += "Eye Color: " + person[0].eyeColor + "\n";
-  // personInfo += "Occupation: " + person[0].occupation + "\n";
-  // personInfo += "Parents: " + person[0].parents + "\n";
-  // personInfo += "Current Spouse: " + person[0].currentSpouse + "\n";
-  // TODO: finish getting the rest of the information to display
-  //alert(personInfo);
-  console.log(personInfo);
-}
-
 function searchForFamily(person, people){
   var spouseList = findCurrentSpouse(person, people);
   var parentList = findParents(person, people);
   var childrenList = findChildren(person, people);
-  return spouseList;
+  return childrenList;
 }
 
 function findChildren(person, people){
+  //first we identify the person who we are checking to see if they have children
   let idToCheck = person[0].id;
-  let personName = person[0].firstName + " " + person[0].lastName;
-  // parentsToCheck is the name of the Array each person has containing known parents
-  var parentsToCheck = person[0].parents;
-  // Now lets loop through the parentsToCheck Array and get their ids
-  if (parentsToCheck.length != 0){
-    parentsToCheck.forEach(function (arrayItem) {
-      var parentId = arrayItem;
-      //console.log(parentId);
-      //Now we have the parent's id, we can cross check them against "the people" and get their info to output their names and relationships
-      people.forEach(function (peoplesItem) {
-        if(peoplesItem.id === parentId){
-          //now we get gender to determine relationship
-          if(peoplesItem.gender === "male"){
-            var parentalRelationship = "father"
-          }
-          else{
-            var parentalRelationship = "mother"
-          }
-          //Now that we have the person and the relationship we will output the info
-          console.log(peoplesItem.firstName + " " + peoplesItem.lastName + ": " + parentalRelationship);
+  // Now lets loop through the people's array and see who even has parents listed
+  var foundParents = people.filter(function(el){
+    if(el.parents.length != 0){
+      return true;
+    }
+    else{
+      return false;
+    }
+  })
+  // We have the array and no let's keep only the people who have parents listed
+  var nonFalsePeopleWithParents = foundParents.filter(Boolean);
+ // Now let's go through this Array and see if this person has any children by matching their id to an id in someone else's parent Array
+  nonFalsePeopleWithParents.map(function(el){
+    //Let's loop through the individual's parent Array and see if we have a match.
+    for(let i = 0; i < el.parents.length; i++){
+      if(el.parents[i] === idToCheck){
+        if(el.gender === "male"){
+          var offspringRelationship = "son"
         }
-        //var x = peoplesItem.id + 2;
-        //console.log(x);
-    });
-      
-      //console.log(x);
-  });
-  }
-  else{
-    //alert(personName + " does not have any known parents.");
-    console.log(personName + " does not have any known children.");
-  }
+        else{
+          var offspringRelationship = "daughter"
+        }
+        console.log(el.firstName + " " + el.lastName + ": " + offspringRelationship);
+      }
+    }
+  })
 }
 
 function findParents(person, people){
@@ -251,11 +223,20 @@ function findParents(person, people){
   let personName = person[0].firstName + " " + person[0].lastName;
   // parentsToCheck is the name of the Array each person has containing known parents
   var parentsToCheck = person[0].parents;
+  var peopleWithParents = people.map(function(el){
+    if(el.parents.length != 0){
+      return el;
+    }
+    else{
+      return false;
+    }
+    var nonFalsePeopleWithParents = peopleWithParents.filter(Boolean);
+    return nonFalsePeopleWithParents;
+  })
   // Now lets loop through the parentsToCheck Array and get their ids
   if (parentsToCheck.length != 0){
     parentsToCheck.forEach(function (arrayItem) {
       var parentId = arrayItem;
-      //console.log(parentId);
       //Now we have the parent's id, we can cross check them against "the people" and get their info to output their names and relationships
       people.forEach(function (peoplesItem) {
         if(peoplesItem.id === parentId){
@@ -269,11 +250,7 @@ function findParents(person, people){
           //Now that we have the person and the relationship we will output the info
           console.log(peoplesItem.firstName + " " + peoplesItem.lastName + ": " + parentalRelationship);
         }
-        //var x = peoplesItem.id + 2;
-        //console.log(x);
     });
-      
-      //console.log(x);
   });
   }
   else{
@@ -288,7 +265,6 @@ function findCurrentSpouse(person, people){
     if(spouseToCheck === el.id){
       let relationship = "spouse";
       console.log(el.firstName + " " + el.lastName + ": spouse");
-      //displayFamily(el, relationship);
       return el;
     }
     else{

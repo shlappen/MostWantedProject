@@ -6,15 +6,14 @@ Build all of your functions for displaying and gathering information below (GUI)
 // app is the function called to start the entire application
 function app(people){
   let searchType = promptFor("Do you know the name of the person you are looking for? Enter 'yes' or 'no'", yesNo).toLowerCase();
-  var searchResults;
+  let searchResults;
   switch(searchType){
     case 'yes':
       searchResults = searchByName(people);
       break;
     case 'no':
-      // TODO: search by traits
-      // which trait would you liek t
-      
+      let selectedTrait = displaySearchOptionList();
+      searchByMultipleTraits(people, selectedTrait);
       break;
       default:
     app(people); // restart app
@@ -25,6 +24,69 @@ function app(people){
 }
 
 
+//turn this into an array
+function displaySearchOptionList(){
+  let selectedTrait = promptFor("Which trait would you like to search by?" + "\n" +
+  "'1': Gender" + "\n" +
+  "'2': Height" + "\n" +
+  "'3': Weight" + "\n" +
+  "'4': Eye Color" + "\n" +
+  "'5': Occupation" + "\n" +
+  "'6': Search" + "\n" +
+  "Type the number of the option you want or 'restart' or 'quit'", chars);
+  return selectedTrait;
+}
+
+ function searchByMultipleTraits(people, selectedTrait){
+   var foundPeople;
+  switch(selectedTrait){
+    case '1':
+      let trait = "gender"
+      let value = promptFor("Male or female?", chars);
+      foundPeople += getPeople(people, trait, value);
+      //get people
+
+      break;
+
+    case '2':
+      trait = "height";
+      value = promptFor("Please enter height in inches.", chars);
+      searchBy(people, trait, value);
+      break;
+    // case '3':
+    //   let trait = "weight";
+    //   let value = promptFor("Please weight in pounds.", chars);
+    //   searchResults = searchBy(people, trait, value);
+    //   break;
+    // case '4':
+    //   let trait = "eyeColor"
+    //   let value = promptFor("Please weight in pounds.", chars);
+    //   searchResult = searchBy(people, trait, value);
+    //   break;
+    // case '5':
+    //   let trait = "occupation"
+    //   let value = promptFor("What is their occupation?", chars);
+    //   searchResult = searchBy(people, trait, value);
+    //   break;
+    // case '6':
+    //   displayPeople(people);
+    default: 
+    app(people);
+      break;
+  }
+}
+
+function getPeople(people, trait, value){
+foundPeople = people.filter(function(person){
+  if(person[trait] == value){
+    return true;
+  }
+  else{
+    return false;
+  }
+})
+return foundPeople;
+}
 
 // Menu function to call once you find who you are looking for
 function mainMenu(person, people){
@@ -57,24 +119,6 @@ function mainMenu(person, people){
     default:
     return mainMenu(person, people); // ask again
   }
-}
-
-function searchByName(people){
-  let firstName = promptFor("What is the person's first name?", chars);
-  let lastName = promptFor("What is the person's last name?", chars);
-
-  var foundPerson = people.filter(function(person){
-    if(person.firstName === firstName && person.lastName === lastName){
-      return true;
-    }
-    else{
-      return false;
-    }
-  })
-
-  // TODO: find the person using the name they entered
-  
-  return foundPerson;
 }
 
 function searchByName(people){
@@ -130,6 +174,7 @@ function promptFor(question, valid){
 function yesNo(input){
   return input.toLowerCase() == "yes" || input.toLowerCase() == "no";
 }
+
 
 // helper function to pass in as default promptFor validation
 function chars(input){

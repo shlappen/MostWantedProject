@@ -169,7 +169,6 @@ function searchByName(people){
 }
 var descendantsToReturn = [];
 function searchForDescendants(person, people){
-  //console.log(person[0].firstName + " " + people[0].firstName);
   //first we identify the person who we are checking to see if they have children
   let idToCheck = person[0].id;
   let personName = person[0].firstName + " " + person[0].lastName;
@@ -185,7 +184,6 @@ function searchForDescendants(person, people){
   // We have the array and no let's keep only the people who have parents listed
   var nonFalsePeopleWithParents = foundParents.filter(Boolean);
  // Now let's go through this Array and see if this person has any children by matching their id to an id in someone else's parent Array
- //var descendantsToReturn = []; 
  nonFalsePeopleWithParents.map(function(el){
     //Let's loop through the nonFalsePeopleWithParents Array and see if we have a match.
     for(let i = 0; i < el.parents.length; i++){
@@ -224,10 +222,11 @@ function searchForFamily(person, people){
   var spouseList = findCurrentSpouse(person, people);
   var parentList = findParents(person, people);
   var childrenList = findChildren(person, people);
-
+  var allFamily = spouseList.concat(parentList);
+  allFamily = allFamily.concat(childrenList);
   // let personInfo = person[0].firstName + person[0].lastName + "'s Known Family: \n";
   // prompt(personInfo);
-  return parentList;
+  return allFamily;
 }
 
 function findChildren(person, people){

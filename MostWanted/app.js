@@ -136,8 +136,9 @@ function mainMenu(person, people){
     case "family":
       searchForFamily(person, people);
     break;
-    case "descendants":
+    case "d":
     // TODO: get person's descendants
+      searchForDescendants(person, people);
     break;
     case "restart":
     app(people); // restart
@@ -167,14 +168,71 @@ function searchByName(people){
   return foundPerson;
 }
 
+function searchForDescendants(person, people){
+  //console.log(person[0].firstName + " " + people[0].firstName);
+  //first we identify the person who we are checking to see if they have children
+  let idToCheck = person[0].id;
+  let personName = person[0].firstName + " " + person[0].lastName;
+  // Now lets loop through the people's array and see who even has parents listed
+  var foundParents = people.filter(function(el){
+    if(el.parents.length != 0){
+      return true;
+    }
+    else{
+      return false;
+    }
+  })
+  // We have the array and no let's keep only the people who have parents listed
+  var nonFalsePeopleWithParents = foundParents.filter(Boolean);
+ // Now let's go through this Array and see if this person has any children by matching their id to an id in someone else's parent Array
+  nonFalsePeopleWithParents.map(function(el){
+    //Let's loop through the nonFalsePeopleWithParents Array and see if we have a match.
+    var descendantCounter = 0;
+    for(let i = 0; i < el.parents.length; i++){
+      if(el.parents[i] === idToCheck){
+        if(el.gender === "male"){
+          var offspringRelationship = "male descendant"
+        }
+        else{
+          var offspringRelationship = "female descendant"
+        }
+        var nextPersonToCheckForKids = 	[
+          {
+          "id": el.id,
+          "firstName": el.firstName,
+          "lastName": el.lastName,
+          "gender": el.gender,
+          "dob": el.dob,
+          "height": el.height,
+          "weight": el.weight,
+          "eyeColor": el.eyeColor,
+          "occupation": el.occupation,
+          "parents": el.parents,
+          "currentSpouse": el.currentSpouse
+        }
+        ];
+        console.log(personName + " has descendent: " + el.firstName + " " + el.lastName + ": " + offspringRelationship);
+        searchForDescendants(nextPersonToCheckForKids, people);
+        // descendantCounter = descendantCounter + 1;
+        
+      }
+      //We are checking this child for any children, we will look through the people with nonFalsePeopleWithParents Array to see if the values in anyone's parents array equals el.id 
+      // if(el.parents){
+
+      // }
+    }
+    // if(descendantCounter === 0){
+    //   console.log("|" + descendantCounter + "|");
+    // }
+  })  
+}
+
 function searchForFamily(person, people){
-  var spouseDisplay = findCurrentSpouse(person, people);
-  var parentList = findParents(person, people);
-  var childrenList = findChildren(person, people);
-  //var displayFamily = prompt(person[0].firstName + " " + person[0].lastName + "'s Known Family:");
-  let personInfo = person[0].firstName + person[0].lastName + "'s Known Family: \n";
-  //personInfo += "First Name: " + person[0].firstName + "\n";
-  display
+  findCurrentSpouse(person, people);
+  findParents(person, people);
+  findChildren(person, people);
+  // let personInfo = person[0].firstName + person[0].lastName + "'s Known Family: \n";
+  // prompt(personInfo);
 }
 
 function findChildren(person, people){

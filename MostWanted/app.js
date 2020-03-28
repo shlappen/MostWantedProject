@@ -50,7 +50,7 @@ function runSearch(people){
       foundPeople = enterSearchCriteria(foundPeople, input, people);
 
     //if foundPeople has no people in it:
-      if(!foundPeople.Length)
+      if(!foundPeople)
       {
         alert("No matches found. Please try again.");
         runSearch(people); //start over
@@ -231,6 +231,7 @@ function searchForFamily(person, people){
   findCurrentSpouse(person, people);
   findParents(person, people);
   findChildren(person, people);
+
   // let personInfo = person[0].firstName + person[0].lastName + "'s Known Family: \n";
   // prompt(personInfo);
 }

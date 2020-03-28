@@ -24,31 +24,38 @@ function app(people){
 
 
 function displaySearchOptionList(){
-  var input = promptFor("Which trait would you like to search by?" + "\n" +
+  var input = prompt("Which trait would you like to search by?" + "\n" +
   "'1': Gender" + "\n" +
   "'2': Height" + "\n" +
   "'3': Weight" + "\n" +
   "'4': Eye Color" + "\n" +
   "'5': Occupation" + "\n" +
-  "'6': Start new search" + "\n" +
-  "Type the number of the option you want or 'restart' or 'quit'", ints);
+  "'6': Clear Search" + "\n" +
+  "Select by number or enter'restart' to go back to beginning.");
   return input;
 }
 
 function runSearch(people){
+  //change variable
   var foundPeople = people;
   var isSearching = true;
+
   while (isSearching){
+    //user chooses option:
     var input = displaySearchOptionList();
+
     if(input == "6"){
       isSearching = false;
     } else {
-      foundPeople = enterSearchCriteria(foundPeople, input);
-      if(!foundPeople)
+      foundPeople = enterSearchCriteria(foundPeople, input, people);
+
+    //if foundPeople has no people in it:
+      if(!foundPeople.Length)
       {
         alert("No matches found. Please try again.");
-        runSearch(people);
+        runSearch(people); //start over
       }
+      //otherwise display the people that were found:
       else{
         displayPeople(foundPeople);
       }
@@ -57,21 +64,21 @@ function runSearch(people){
   runSearch(people);
 }
 
-function enterSearchCriteria(foundPeople, input){
+function enterSearchCriteria(foundPeople, input, people){
   switch(input){
     case "1":
       var trait = "gender";
-      var selection = promptFor("Are they male or female?", chars);
+      var selection = promptFor("Are they male or female?", maleFemale);
       foundPeople = getPeople(trait, selection, foundPeople);
       break;
     case "2":
       var trait = "height";
-      var selection = parseInt(promptFor("What is their " + trait + " in inches?", chars));
+      var selection = parseInt(promptFor("What is their " + trait + " in inches?", ints));
       foundPeople = getPeople(trait, selection, foundPeople);
       break;
     case "3":
       var trait = "weight";
-      var selection = parseInt(promptFor("What is their " + trait + " in pounds?", chars));
+      var selection = parseInt(promptFor("What is their " + trait + " in pounds?", ints));
       foundPeople = getPeople(trait, selection, foundPeople);
       break;
     case "4":
@@ -87,13 +94,13 @@ function enterSearchCriteria(foundPeople, input){
     case "restart":
       app(people); // restart
       break;
-    case "quit":
-      return; // stop execution
       default:
-      return runSearch(foundPeople); //ask again and search by a different trait
+      return runSearch(people); //ask again
   }
   return foundPeople;
 }
+
+
 
 function getPeople(key, value, foundPeople){
   foundPeople = foundPeople.filter(function(person){
@@ -167,7 +174,7 @@ function searchForFamily(person, people){
   //var displayFamily = prompt(person[0].firstName + " " + person[0].lastName + "'s Known Family:");
   let personInfo = person[0].firstName + person[0].lastName + "'s Known Family: \n";
   //personInfo += "First Name: " + person[0].firstName + "\n";
-  prompt(personInfo);
+  display
 }
 
 function findChildren(person, people){
@@ -190,10 +197,10 @@ function findChildren(person, people){
     for(let i = 0; i < el.parents.length; i++){
       if(el.parents[i] === idToCheck){
         if(el.gender === "male"){
-          var offspringRelationship = "son"
+          var offspringRelationship = "son";
         }
         else{
-          var offspringRelationship = "daughter"
+          var offspringRelationship = "daughter";
         }
         console.log(el.firstName + " " + el.lastName + ": " + offspringRelationship);
       }
@@ -225,14 +232,14 @@ function findParents(person, people){
         if(peoplesItem.id === parentId){
           //now we get gender to determine relationship
           if(peoplesItem.gender === "male"){
-            var parentalRelationship = "father"
+            var parentalRelationship = "father";
           }
           else{
-            var parentalRelationship = "mother"
+            var parentalRelationship = "mother";
           }
           //Now that we have the person and the relationship we will output the info
           console.log(peoplesItem.firstName + " " + peoplesItem.lastName + ": " + parentalRelationship);
-          
+          displayPersonNameAndRelationship(peoplesItem, parentalRelationship);
         }
     });
   });
@@ -250,6 +257,7 @@ function findCurrentSpouse(person, people){
     if(spouseToCheck === el.id){
       //spouseInfo += el.firstName + " " + el.lastName + "\n";
       console.log(el.firstName + " " + el.lastName + ": spouse");
+      var relationship = "spouse";
       return el;
     }
     else{
@@ -267,6 +275,10 @@ function displayPeople(people){
   alert(people.map(function(person){
     return person.firstName + " " + person.lastName;
   }).join("\n"));
+}
+
+function displayPersonNameAndRelationship(person, relationship){
+  alert(person.firstName + " " + person.lastName + ": " + relationship);
 }
 
 function displayPerson(person){
@@ -307,8 +319,27 @@ function chars(input){
   return true; // default validation only
 }
 
+// function intsRestart(input){
+//   if(0 < parseInt(input) < 7
+//      || input.toLowerCase() == "restart"){
+//     return true;
+//   }
+//     else{
+//     return false;
+//     }
+//   }
+
 function ints(input){
-  if(0 < parseInt(input) < 6 || input.toLowerCase == "quit" || input.toLowerCase == "restart"){
+  if(parseInt(input)){
     return true;
   }
+  else{
+    return false;
+  }
 }
+
+
+function maleFemale(input){
+  return input.toLowerCase() == "male" || input.toLowerCase() == "female";
+}
+

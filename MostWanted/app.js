@@ -214,7 +214,11 @@ function searchForDescendants(person, people){
         searchForDescendants(nextPersonToCheckForKids, people);
       }
     }
-  })
+  })  
+  // if(descendantsToReturn && descendantsToReturn.length){
+  //   alert(personName + "has the following descendant(s):");
+  //   displayPeople(descendantsToReturn);
+  // }
   return descendantsToReturn;
 }
 

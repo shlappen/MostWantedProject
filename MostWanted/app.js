@@ -227,11 +227,12 @@ function searchForFamily(person, people){
   var spouseList = findCurrentSpouse(person, people);
   var parentList = findParents(person, people);
   var childrenList = findChildren(person, people);
-  var allFamily = spouseList.concat(parentList);
-  allFamily = allFamily.concat(childrenList);
+  //var allFamily = spouseList.concat(parentList);
+  //allFamily = allFamily.concat(childrenList);
   // let personInfo = person[0].firstName + person[0].lastName + "'s Known Family: \n";
   // prompt(personInfo);
-  return allFamily;
+  //return allFamily;
+  displayPersonFamilyInfo(person, spouseList, parentList, childrenList)
 }
 
 function findChildren(person, people){
@@ -344,6 +345,56 @@ function displayPerson(person){
   personInfo += "Occupation: " + person[0].occupation + "\n";
   personInfo += "Parents: " + person[0].parents + "\n";
   personInfo += "Current Spouse: " + person[0].currentSpouse + "\n";
+  // TODO: finish getting the rest of the information to display
+  alert(personInfo);
+}
+
+function displayPersonFamilyInfo(person, spouseArray, parentArray, childrenArray){
+  // print all of the information about a person:
+  // height, weight, age, name, occupation, eye color.
+  let personInfo = person[0].firstName + " " + person[0].lastName + " Family Info\n";
+  personInfo += "----------"+ "\n";
+  personInfo += "Current Spouse: " + "\n";
+  if(spouseArray.length === 0){
+    personInfo += "--> unknown" + "\n";
+  }
+  else{
+    for(let i = 0; i < spouseArray.length; i++){
+        personInfo += "-->" + spouseArray[i].firstName + " " + spouseArray[i].lastName + "\n";
+    }
+  }
+  personInfo += "----------"+ "\n";
+  personInfo += "Parents: " + "\n";
+  if(parentArray.length === 0){
+    personInfo += "--> unknown" + "\n";
+  }
+  else{
+    for(let i = 0; i < parentArray.length; i++){
+        personInfo += "-->" + parentArray[i].firstName + " " + parentArray[i].lastName;
+        if(parentArray[i].gender === "male"){
+          personInfo += ", father" + "\n";
+        }
+        else{
+          personInfo += ", mother" + "\n";
+        }
+    }
+  }
+  personInfo += "----------"+ "\n";
+  personInfo += "Children: " + "\n";
+  if(childrenArray.length === 0){
+    personInfo += "--> unknown" + "\n";
+  }
+  else{
+    for(let i = 0; i < childrenArray.length; i++){
+        personInfo += "-->" + childrenArray[i].firstName + " " + childrenArray[i].lastName;
+        if(childrenArray[i].gender === "male"){
+          personInfo += ", son" + "\n";
+        }
+        else{
+          personInfo += ", daughter" + "\n";
+        }
+    }
+  }
   // TODO: finish getting the rest of the information to display
   alert(personInfo);
 }

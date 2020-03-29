@@ -226,6 +226,10 @@ function searchForDescendants(person, people){
   })  
 }
 
+function findSiblings(person, parent, people){
+  
+}
+
 function searchForFamily(person, people){
   findCurrentSpouse(person, people);
   findParents(person, people);
@@ -385,7 +389,7 @@ function ints(input){
   else{
     return false;
   }
-  
+
 }
 
 //helper function to validate that user entered male or female for gender

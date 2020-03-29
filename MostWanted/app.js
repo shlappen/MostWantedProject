@@ -138,7 +138,8 @@ function mainMenu(person, people){
     break;
     case "d":
     // TODO: get person's descendants
-      searchForDescendants(person, people);
+      let descendantOutput = searchForDescendants(person, people);
+      displayDescendants(descendantOutput);
     break;
     case "restart":
     app(people); // restart
@@ -172,6 +173,7 @@ function searchByName(people){
   }
 }
 var descendantsToReturn = [];
+var descendantDisplayText = "";
 function searchForDescendants(person, people){
   //first we identify the person who we are checking to see if they have children
   let idToCheck = person[0].id;
@@ -188,6 +190,7 @@ function searchForDescendants(person, people){
   // We have the array and no let's keep only the people who have parents listed
   var nonFalsePeopleWithParents = foundParents.filter(Boolean);
   // Now let's go through this Array and see if this person has any children by matching their id to an id in someone else's parent Array
+  //var descendantDisplayText = "";
   nonFalsePeopleWithParents.map(function(el){
     //Let's loop through the nonFalsePeopleWithParents Array and see if we have a match.
     for(let i = 0; i < el.parents.length; i++){
@@ -215,12 +218,14 @@ function searchForDescendants(person, people){
         }
         ];
         console.log(personName + " has descendent: " + el.firstName + " " + el.lastName + ": " + offspringRelationship);
+        descendantDisplayText = descendantDisplayText + el.firstName + " " + el.lastName + " is a " + offspringRelationship + " of " + personName + " \n";
         //Example of recursive function using searchForDescendants function <===================================================================CHECK THIS OUT=======================================
         searchForDescendants(nextPersonToCheckForKids, people);
       }
     }
-  })  
-  return descendantsToReturn;
+  })
+  return descendantDisplayText;
+  //return descendantsToReturn;
 }
 
 function searchForFamily(person, people){
@@ -329,6 +334,12 @@ function displayPeople(people){
 
 function displayPersonNameAndRelationship(person, relationship){
   alert(person.firstName + " " + person.lastName + ": " + relationship);
+}
+
+function displayDescendants(descendantInput){
+  let infoToShow = "Descendants: " + "\n";
+  infoToShow =infoToShow + descendantInput;
+  alert(infoToShow);
 }
 
 function displayPerson(person){

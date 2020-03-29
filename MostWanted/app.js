@@ -153,7 +153,7 @@ function mainMenu(person, people){
 function searchByName(people){
   let firstName = promptFor("What is the person's first name?", chars);
   let lastName = promptFor("What is the person's last name?", chars);
-
+  // TODO: find the person using the name they entered
   var foundPerson = people.filter(function(person){
     if(person.firstName === firstName && person.lastName === lastName){
       return true;
@@ -163,9 +163,13 @@ function searchByName(people){
     }
   })
 
-  // TODO: find the person using the name they entered
-  
-  return foundPerson;
+  if(foundPerson == null || foundPerson.length === 0){
+    alert("Could not find that individual.");
+    return app(people); // restart
+  }
+  else{
+    return foundPerson;
+  }
 }
 var descendantsToReturn = [];
 function searchForDescendants(person, people){

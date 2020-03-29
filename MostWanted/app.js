@@ -164,7 +164,6 @@ function searchByName(people){
   })
 
   // TODO: find the person using the name they entered
-  
   return foundPerson;
 }
 
@@ -378,16 +377,7 @@ function chars(input){
   return true; // default validation only
 }
 
-// function intsRestart(input){
-//   if(0 < parseInt(input) < 7
-//      || input.toLowerCase() == "restart"){
-//     return true;
-//   }
-//     else{
-//     return false;
-//     }
-//   }
-
+//helper function to validate user entered an integer
 function ints(input){
   if(parseInt(input)){
     return true;
@@ -395,9 +385,10 @@ function ints(input){
   else{
     return false;
   }
+  
 }
 
-
+//helper function to validate that user entered male or female for gender
 function maleFemale(input){
   return input.toLowerCase() == "male" || input.toLowerCase() == "female";
 }

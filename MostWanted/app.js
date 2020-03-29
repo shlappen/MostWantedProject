@@ -187,8 +187,8 @@ function searchForDescendants(person, people){
   })
   // We have the array and no let's keep only the people who have parents listed
   var nonFalsePeopleWithParents = foundParents.filter(Boolean);
- // Now let's go through this Array and see if this person has any children by matching their id to an id in someone else's parent Array
- nonFalsePeopleWithParents.map(function(el){
+  // Now let's go through this Array and see if this person has any children by matching their id to an id in someone else's parent Array
+  nonFalsePeopleWithParents.map(function(el){
     //Let's loop through the nonFalsePeopleWithParents Array and see if we have a match.
     for(let i = 0; i < el.parents.length; i++){
       if(el.parents[i] === idToCheck){
@@ -215,14 +215,11 @@ function searchForDescendants(person, people){
         }
         ];
         console.log(personName + " has descendent: " + el.firstName + " " + el.lastName + ": " + offspringRelationship);
+        //Example of recursive function using searchForDescendants function <===================================================================CHECK THIS OUT=======================================
         searchForDescendants(nextPersonToCheckForKids, people);
       }
     }
   })  
-  // if(descendantsToReturn && descendantsToReturn.length){
-  //   alert(personName + "has the following descendant(s):");
-  //   displayPeople(descendantsToReturn);
-  // }
   return descendantsToReturn;
 }
 
@@ -307,20 +304,19 @@ function findParents(person, people){
 }
 
 function findCurrentSpouse(person, people){
-  let spouseInfo = "Current Spouse: ";
-  let idToCheck = person[0].id;
   var spouseToCheck = person[0].currentSpouse;
-  var foundFamily = people.filter(function(personToCheck){
-    if(personToCheck.currentSpouse === idToCheck){
-        console.log(personToCheck.firstName + " " + personToCheck.lastName + ": spouse");
-      return true;
+  //Example of .map array method <===================================================================CHECK THIS OUT=======================================
+  var foundFamily = people.map(function(el){
+    if(spouseToCheck === el.id){
+      console.log(el.firstName + " " + el.lastName + ": spouse");
+      return el;
     }
     else{
-      spouseInfo += "none known \n";
       return false;
     }
   })
-  return foundFamily;
+  var nonFalseFoundSpouse = foundFamily.filter(Boolean);
+  return nonFalseFoundSpouse;
 }
 
 // alerts a list of people // for displaying multiple people

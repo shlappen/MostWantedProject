@@ -136,7 +136,7 @@ function mainMenu(person, people){
     case "family":
       searchForFamily(person, people);
     break;
-    case "d":
+    case "descendants":
     // TODO: get person's descendants
       let descendantOutput = searchForDescendants(person, people);
       displayDescendants(descendantOutput);
@@ -317,15 +317,20 @@ function findSiblings(person, parentList, people){
   var siblings;
   var i;
   //filter peopleWithParents list for people whose parent's id matches one of the subject's parents' id
-  for(i = 0; i < parentList.length; i++){
-    siblings = people.filter(function(person){
-      if(person.parents[i] == parentList[i].id && personId != person.id){
-        return true;
-      }
-      else{
-        return false;
-      }
-    })
+  if(parentList.length != 0){
+    for(i = 0; i < parentList.length; i++){
+      siblings = people.filter(function(person){
+        if(person.parents[i] == parentList[i].id && personId != person.id){
+          return true;
+        }
+        else{
+          return false;
+        }
+      })
+    }
+  }
+  else{
+    siblings = [];
   }
   return siblings;
 }
@@ -382,7 +387,7 @@ function displayPerson(person){
   alert(personInfo);
 }
 
-function displayPersonFamilyInfo(person, spouseArray, parentArray, childrenArray, siblings){
+function displayPersonFamilyInfo(person, spouseArray, parentArray, childrenArray, siblingArray){
   // print all of the information about a person:
   // height, weight, age, name, occupation, eye color.
   let personInfo = person[0].firstName + " " + person[0].lastName + " Family Info\n";
@@ -430,19 +435,19 @@ function displayPersonFamilyInfo(person, spouseArray, parentArray, childrenArray
   }
   personInfo += "----------"+ "\n";
   personInfo += "Siblings:"+ "\n";
-  if(siblings.Length === 0){
+  if(siblingArray.length === 0){
     personInfo += "--> unknown" + "\n";
   }
   else{
-    for(let i = 0; i < siblings.length; i++){
-      personInfo += "-->" + siblings[i].firstName + " " + siblings[i].lastName;
-      if(siblings[i].gender === "male"){
+    for(let i = 0; i < siblingArray.length; i++){
+      personInfo += "-->" + siblingArray[i].firstName + " " + siblingArray[i].lastName;
+      if(siblingArray[i].gender === "male"){
         personInfo += ", brother" + "\n";
       }
       else{
         personInfo += ", sister" + "\n";
       }
-  }
+    } 
   }
   // TODO: finish getting the rest of the information to display
   alert(personInfo);
